@@ -48,6 +48,6 @@ export const contactsSortFields = [
   'updatedAt',
 ];
 
-const ContactCollection = model('Contact', contactSchema);
+const ContactCollection = model('contact', contactSchema);
 
 export default ContactCollection;

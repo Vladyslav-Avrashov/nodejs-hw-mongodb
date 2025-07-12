@@ -12,9 +12,13 @@ import { contactsSortFields } from '../db/models/Contact.js';
 import { parseContactFilters } from '../utils/filters/parseContactFilters.js';
 
 export const getContactController = async (req, res) => {
+  const { _id: userId } = req.user;
   const { page, perPage } = parsePaginationParams(req.query);
   const { sortOrder, sortBy } = parseSortParams(req.query, contactsSortFields);
   const filters = parseContactFilters(req.query);
+
+  filters.userId = userId;
+
   const data = await getContacts({ page, perPage, sortBy, sortOrder, filters });
 
   res.json({
@@ -26,7 +30,8 @@ export const getContactController = async (req, res) => {
 
 export const getContactByIdController = async (req, res) => {
   const { contactId } = req.params;
-  const data = await getContactById(contactId);
+  const { _id: userId } = req.user;
+  const data = await getContactById({ _id: contactId, userId });
 
   if (!data) throw createHttpError(404, 'Contact not found');
 
@@ -38,7 +43,8 @@ export const getContactByIdController = async (req, res) => {
 };
 
 export const addContactController = async (req, res) => {
-  const data = await addContact(req.body);
+  const { _id: userId } = req.user;
+  const data = await addContact({ ...req.body, userId });
 
   res.status(201).json({
     status: 201,
@@ -49,7 +55,8 @@ export const addContactController = async (req, res) => {
 
 export const patchContactByIdController = async (req, res) => {
   const { contactId } = req.params;
-  const result = await updateContactById(contactId, req.body);
+  const { _id: userId } = req.user;
+  const result = await updateContactById({ _id: contactId, userId }, req.body);
 
   if (!result) throw createHttpError(404, 'Contact not found');
 
@@ -62,7 +69,8 @@ export const patchContactByIdController = async (req, res) => {
 
 export const deleteContactByIdController = async (req, res) => {
   const { contactId } = req.params;
-  const data = await deleteContactById(contactId);
+  const { _id: userId } = req.user;
+  const data = await deleteContactById({ _id: contactId, userId });
 
   if (!data) throw createHttpError(404, 'Contact not found');
 
