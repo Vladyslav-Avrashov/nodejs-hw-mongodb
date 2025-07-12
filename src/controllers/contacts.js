@@ -6,9 +6,16 @@ import {
   updateContactById,
   deleteContactById,
 } from '../services/contacts.js';
+import { parsePaginationParams } from '../utils/parsePaginationParams.js';
+import { parseSortParams } from '../utils/parseSortParams.js';
+import { contactsSortFields } from '../db/models/Contact.js';
+import { parseContactFilters } from '../utils/filters/parseContactFilters.js';
 
 export const getContactController = async (req, res) => {
-  const data = await getContacts();
+  const { page, perPage } = parsePaginationParams(req.query);
+  const { sortOrder, sortBy } = parseSortParams(req.query, contactsSortFields);
+  const filters = parseContactFilters(req.query);
+  const data = await getContacts({ page, perPage, sortBy, sortOrder, filters });
 
   res.json({
     status: 200,
