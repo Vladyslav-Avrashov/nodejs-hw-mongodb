@@ -2,7 +2,7 @@ import Joi from 'joi';
 // import { emailRegexp } from '../constants/auth-constants.js';
 
 export const registerSchema = Joi.object({
-  username: Joi.string().required(),
+  name: Joi.string().required(),
   email: Joi.string().required(),
   password: Joi.string().min(6).required(),
 });

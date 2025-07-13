@@ -1,17 +1,17 @@
 import { Schema, model } from 'mongoose';
-import { emailRegexp } from '../../constants/auth-constants.js';
+// import { emailRegexp } from '../../constants/auth-constants.js';
 import { saveErrorHandler, setUpdateSettings } from './hooks.js';
 
 const userSchema = new Schema(
   {
-    username: {
+    name: {
       type: String,
       required: true,
     },
     email: {
       type: String,
       unique: true,
-      match: emailRegexp,
+      // match: emailRegexp,
       required: true,
     },
     password: {
